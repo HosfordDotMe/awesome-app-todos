@@ -1,11 +1,6 @@
-const mockTodo = {
-  task:'get some milk',
-  isComplete: false
-};
-
 const TodoApp = {
   rootElement: '#app',
-  todos: [mockTodo],
+  todos: [],
   start: function() {
     this.cacheDOM();
     this.bindEvents();
@@ -17,13 +12,26 @@ const TodoApp = {
     this.taskInput = this.root.querySelector('.task-input');
     this.todoList = this.root.querySelector('.todo-list');
   },
+  addTodo: function() {
+    const taskValue = this.taskInput.value;
+    if (!taskValue){
+      return;
+    }
+    const todo = {
+      task: taskValue,
+      isComplete: false
+    };
+    this.todos.push(todo);
+    this.render();
+    this.taskInput.value = '';
+  },
   bindEvents: function() {
-    this.addButton.addEventListener('click', () => console.log('click'));
+    this.addButton.addEventListener('click', () => this.addTodo());
   },
   render: function() {
     const lis = this.todos
                     .map(todo => `<li>${todo.task}</li>`)
-                    .join();
+                    .join('');
     this.todoList.innerHTML = lis;
   }
 };
