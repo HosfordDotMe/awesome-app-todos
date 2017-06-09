@@ -8,13 +8,11 @@ const TodoApp = {
   },
   cacheDOM: function() {
     this.root = document.querySelector(this.rootElement);
-    //this.addButton = this.root.querySelector('.add-button');
     this.createForm = this.root.querySelector('.create-form');
     this.taskInput = this.root.querySelector('.task-input');
     this.todoList = this.root.querySelector('.todo-list');
   },
   bindEvents: function() {
-    //this.addButton.addEventListener('click', () => this.addTodo());
     this.createForm.addEventListener('submit', (event) => this.addTodo(event));
   },
   addTodo: function(event) {
@@ -31,11 +29,25 @@ const TodoApp = {
     this.render();
     this.taskInput.value = '';
   },
+  cacheDeleteButtons(){
+    this.deleteButtons = this.root.querySelectorAll('.delete');
+  },
+  bindDeleteEvents(){
+    this.deleteButtons.forEach((button, index) => {
+      button.addEventListener('click', () => this.deleteTodo(index));
+    });
+  },
+  deleteTodo(index) {
+    this.todos.splice(index, 1);
+    this.render();
+  },
   render: function() {
     const lis = this.todos
-                    .map(todo => `<li>${todo.task}</li>`)
+                    .map(todo => `<li>${todo.task} <button class='delete'>X</button></li>`)
                     .join('');
     this.todoList.innerHTML = lis;
+    this.cacheDeleteButtons();
+    this.bindDeleteEvents();
   }
 };
 TodoApp.start();
